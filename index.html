@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monitoramento - Tocantins</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>#map { height: 100vh; width: 100%; }</style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Coordenadas centrais do Tocantins: -10.2, -48.3
+        // O número 6 define o nível de zoom (bom para visualizar o estado inteiro)
+        var map = L.map('map').setView([-10.2, -48.3], 6);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        
+        // Exemplo de como adicionar um ponto crítico
+        L.marker([-10.2, -48.3]).addTo(map).bindPopup("Ponto Crítico em Tocantins");
+    </script>
+</body>
+</html>
