@@ -1,24 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
     <title>Mapa de Monitoramento</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style> #map { height: 100vh; width: 100%; } </style>
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+    </style>
 </head>
 <body>
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([-10.1678, -48.3331], 7);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        // Certifique-se de que o arquivo está na pasta 'data'
-        fetch('data/pontos.geojson')
-            .then(res => res.json())
-            .then(data => {
-                L.geoJSON(data).addTo(map);
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 1. Inicializa o mapa centralizado na região (ajuste conforme necessário)
+        var map = L.map('map').setView([-10.1678, -48.3331], 7);
+
+        // 2. Adiciona a camada de mapa base (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // 3. Carrega o arquivo GeoJSON da sua pasta 'dados'
+        fetch('dados/pontos.geojson')
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao carregar o arquivo: " + res.status);
+                return res.json();
             })
-            .catch(err => console.error("Erro ao carregar o arquivo:", err));
+            .then(data => {
+                // 4. Adiciona os pontos ao mapa com um popup interativo
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        if (feature.properties && feature.properties.Id) {
+                            layer.bindPopup("<b>ID: " + feature.properties.Id + "</b>");
+                        }
+                    }
+                }).addTo(map);
+            })
+            .catch(err => console.error("Erro no carregamento:", err));
     </script>
 </body>
 </html>
