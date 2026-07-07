@@ -20,7 +20,12 @@
         }).addTo(map);
 
         // O arquivo deve estar na pasta 'data' dentro do seu repositório
-        fetch('dados/pontos.geojson.geojson')
+        // O nome deve ser exatamente o que você vê no seu repositório
+fetch('dados/pontos.geojson') 
+  .then(res => res.json())
+  .then(data => {
+    L.geoJSON(data).addTo(map);
+  });
           .then(response => {
               if (!response.ok) throw new Error('Arquivo não encontrado');
               return response.json();
